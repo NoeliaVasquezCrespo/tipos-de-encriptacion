@@ -1,23 +1,54 @@
-import cifrado_vigenere
+alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 def main():
-    print("----------------------------------------")
-    print("| Algoritmo de encriptación 'Vigenere' |")
-    print("----------------------------------------\n")
+    print("--------------------------------------")
+    print("Algoritmo de encriptación - Vigenere ")
+    print("--------------------------------------\n")
 
-    vc = cifrado_vigenere.VigenereCipher()
+    texto = input("Mensaje: ")
+    llave = input("Llave:  ")
 
-    string = input("Ingrese un mensaje: ")
-    keyword = input("Ingrese la palabra clave: ")
+    encriptado = encriptar(llave, texto)
+    print("Texto encriptado: " + encriptado)
 
-    print(f'Mensaje:  {string}')
-
-    enciphered = vc.encipher(string, keyword)
-    print(f'Texto Encriptado: {enciphered}')
-
-    deciphered = vc.decipher(enciphered, keyword)
-    print(f'Texto Desencriptado: {deciphered}')
+    desencriptado = desencriptar(llave, encriptado)
+    print("Texto desencriptado: " + desencriptado)
 
 
-main()
+def encriptar(clave, txt):
+    return vingenere(clave, txt, 'encriptar')
+
+
+def desencriptar(clave, txt):
+    return vingenere(clave, txt, 'desencriptar')
+
+
+def vingenere(clave, txt, accion):
+    cadena_vgn = []
+    indice = 0
+    clave = clave.upper()
+
+    for i in txt:
+        num = alfabeto.find(i.upper())
+        if num != -1:
+            if accion == 'encriptar':
+                num += alfabeto.find(clave[indice])
+            elif accion == 'desencriptar':
+                num -= alfabeto.find(clave[indice])
+            num %= len(alfabeto)
+            if i.isupper():
+                cadena_vgn.append(alfabeto[num])
+            elif i.islower():
+                cadena_vgn.append(alfabeto[num].lower())
+            indice += 1
+            if indice == len(clave):
+                indice = 0
+
+        else:
+            cadena_vgn.append(i)
+    return ''.join(cadena_vgn)
+
+
+if __name__ == '__main__':
+    main()
